@@ -188,33 +188,64 @@ function loadMap(){
 
       map.add(wildfireLayer);
 
-      const airportLayer = new FeatureLayer({
-        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_Airports_Lab2_AGOL/FeatureServer",
-        renderer: airportRenderer
-      });   
-
-
       const airportRenderer = {
         "type": "simple",
         "symbol": {
-          "type": "picture-markers",
-          "url": "https://sounny.github.io/agol/outline_local_airport_black_24dp.png",
+          "type": "picture-marker",
+          "url": "https://jlloydcsapo.github.io/Lab-2-AGOL/outline_local_airport_black_24dp.png",
           "width": "18px",
           "height": "18px"
         }
-      }
+      };
 
       const heliportRenderer = {
         "type": "simple",
         "symbol": {
           "type": "picture-marker",
-          "url": "https://sounny.github.io/agol/outline_local_airport_black_24dp.png",
+          "url": "https://jlloydcsapo.github.io/Lab-2-AGOL/helicopter.png",
           "width": "18px",
           "height": "18px"
         }
-      }
+      };
+
+      //const to make the airport labels
+      const airportLabels = {
+        symbol: {
+          type: "text",
+          color: "#FFFFFF",
+          haloColor: "#5E8D74",
+          haloSize: "2px",
+          font: {
+            size: "12px",
+            family: "Noto Sans",
+            style: "italic",
+            weight: "normal"
+          }
+        },
+        labelPlacement: "above-center",
+        labelExpressionInfo: {
+          expression: "$feature.Fac_Name"
+        }
+      };
+
+
+      const airportLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_Airports_Lab2_AGOL/FeatureServer",
+        renderer: airportRenderer,
+        definitionExpression: "Fac_Type = 'AIRPORT'", //adding sql to filter for airports
+        labelingInfo: [airportLabels] //adding the labels
+      });   
+
+      const helicopterLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/US_Airports_Lab2_AGOL/FeatureServer",
+        renderer: heliportRenderer,
+        definitionExpression: "Fac_Type = 'HELIPORT'", //adding sql to filter for airports
+        labelingInfo: [airportLabels] //adding the labels
+      });  
+
 
       map.add(airportLayer);
+      map.add(helicopterLayer);
     }); 
 
 };
